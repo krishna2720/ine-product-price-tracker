@@ -1,0 +1,43 @@
+var Or = 40
+  , kr = 40
+  , Ar = class {
+    hoverAt = 0;
+    lastMoveAt = 0;
+    moves = [];
+    detach = null;
+    req;
+    constructor(e) {
+        this.req = e
+    }
+    start() {}
+    stop() {
+        this.detach?.(),
+        this.detach = null
+    }
+    enter() {
+        this.hoverAt ||= Date.now()
+    }
+    move(e, t) {
+        let n = Date.now();
+        n - this.lastMoveAt < kr || (this.lastMoveAt = n,
+        this.hoverAt ||= n,
+        this.moves.push([Math.round(e), Math.round(t), n]),
+        this.moves.length > Or && this.moves.shift())
+    }
+    missing() {
+        return this.moves.length < this.req.minMoves ? `Hover over the price area to load the current price.` : this.hoverAt && Date.now() - this.hoverAt < this.req.minDwellMs ? `Hold on — checking availability…` : null
+    }
+    ready() {
+        return this.missing() === null
+    }
+    snapshot(e) {
+        let t = Date.now();
+        return {
+            hoverAt: this.hoverAt,
+            dwellMs: this.hoverAt ? t - this.hoverAt : 0,
+            moves: this.moves.slice(),
+            clickAt: t,
+            trusted: e
+        }
+    }
+}
