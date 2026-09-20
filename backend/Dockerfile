@@ -1,6 +1,5 @@
 FROM node:22
 
-# Install reliable dependencies for Chromium
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -33,14 +32,16 @@ RUN apt-get update && apt-get install -y \
     libxrender1 \
     libxss1 \
     libxtst6 \
-    xdg-utils
+    xdg-utils \
+    libdrm2 \
+    libxkbcommon0 \
+    libatspi2.0-0
 
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
 
-# Install Playwright browser safely
 RUN npx playwright install chromium
 
 COPY . .
