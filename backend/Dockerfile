@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:20
 
 # Install reliable dependencies for Chromium
 RUN apt-get update && apt-get install -y \
