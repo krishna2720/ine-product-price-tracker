@@ -17,24 +17,6 @@ export default function Dashboard({ goTo }) {
         }
         setLoading(false)
     }
-
-    const handleRefreshWithScraping = async () => {
-        try {
-            // Backend par background scrape trigger kar rahe hain
-            await fetch(`${import.meta.env.VITE_API_URL}/scrape/run`, {
-                method: 'POST'
-            });
-            
-            // 4 second ka gap taaki scraper background me data update kar de, phir screen refresh ho
-            setTimeout(async () => {
-                await fetchProducts();
-            }, 4000);
-            
-        } catch (error) {
-            console.error('Error triggering scrape:', error);
-        }
-    };
-
     async function handleRemove(productId) {
         if (!confirm('Stop tracking this product?')) return
         try {
@@ -61,7 +43,7 @@ export default function Dashboard({ goTo }) {
 </h1>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button
-                        onClick={handleRefreshWithScraping}
+                        onClick={fetchProducts}
                         style={{ background: 'blue', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px' }}
                     >
                         ↻ Refresh
