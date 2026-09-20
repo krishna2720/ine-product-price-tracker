@@ -34,7 +34,19 @@ export default function Dashboard({ goTo }) {
     }
 
     if (loading) return <div style={{ padding: '2rem' }}>Loading...</div>
-
+    const handleRefresh = async () => {
+  try {
+    // 1. Pehle backend par scrape run karo taaki prices update ho jayein
+    await axios.post(`${import.meta.env.VITE_API_URL}/scrape/run`);
+    
+    // 2. Phir updated products list fetch karo
+    await fetchProducts();
+    
+    alert('Prices successfully updated!');
+  } catch (error) {
+    console.error("Refresh karne me error aaya:", error);
+  }
+};
     return (
         <div style={{ maxWidth: '900px', margin: '2rem auto', padding: '0 1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
@@ -43,11 +55,11 @@ export default function Dashboard({ goTo }) {
 </h1>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button
-                        onClick={fetchProducts}
-                        style={{ background: 'blue', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px' }}
-                    >
-                        ↻ Refresh
-                    </button>
+    onClick={handleRefresh}
+    style={{ background: 'blue', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px' }}
+>
+    ↻ Refresh
+</button>
                     <button
                         onClick={() => goTo('search')}
                         style={{ background: 'green', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px' }}
