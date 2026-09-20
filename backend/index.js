@@ -20,6 +20,9 @@ app.use(express.json());
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', time: new Date().toISOString() });
 });
+app.get('/', (req, res) => {
+  res.send('Price Tracker Backend is live and running! 🚀');
+});
 app.get('/search', async (req, res) => {
     const q = (req.query.q || '').toLowerCase().trim();
     if (!q) return res.status(400).json({ error: 'Missing query param ?q=' });
